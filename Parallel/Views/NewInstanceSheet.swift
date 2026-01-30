@@ -27,163 +27,140 @@ struct NewInstanceSheet: View {
         VStack(spacing: 0) {
             // Header
             HStack {
-                Text("New Claude Instance")
-                    .font(.title2)
-                    .fontWeight(.semibold)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("New Instance")
+                        .font(.system(size: 15, weight: .semibold))
+                    Text("Create a new Claude Code instance")
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                }
 
                 Spacer()
 
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.title2)
+                Button { dismiss() } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 11, weight: .medium))
                         .foregroundColor(.secondary)
+                        .frame(width: 24, height: 24)
+                        .background(Color.secondary.opacity(0.1))
+                        .clipShape(Circle())
                 }
                 .buttonStyle(.plain)
             }
-            .padding(24)
+            .padding(20)
 
             Divider()
 
             // Form content
             ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 20) {
                     // Instance name
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Instance Name")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-
+                    FormSection(title: "Instance Name", hint: "A short, descriptive name") {
                         TextField("e.g., Feature Auth, Bug Fix #123", text: $instanceName)
                             .textFieldStyle(.roundedBorder)
-
-                        Text("A short, descriptive name for this instance")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                     }
 
                     // Task description
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Task Description")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-
+                    FormSection(title: "Task Description", hint: "What should Claude work on?") {
                         TextEditor(text: $taskDescription)
-                            .font(.body)
-                            .frame(minHeight: 100, maxHeight: 200)
+                            .font(.system(size: 12))
+                            .frame(minHeight: 80, maxHeight: 150)
                             .padding(8)
-                            .background(Color(nsColor: .textBackgroundColor))
+                            .background(Color(nsColor: .controlBackgroundColor))
                             .clipShape(RoundedRectangle(cornerRadius: 6))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 6)
-                                    .stroke(Color(nsColor: .separatorColor), lineWidth: 1)
+                                    .strokeBorder(Color.secondary.opacity(0.2), lineWidth: 1)
                             )
-
-                        Text("Describe what you want Claude to do. Be specific about the requirements.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                     }
 
                     // Isolation mode
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Isolation Mode")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
+                    FormSection(title: "Isolation Mode") {
+                        VStack(spacing: 8) {
+                            IsolationModeOption(
+                                mode: .worktree,
+                                isSelected: isolationMode == .worktree,
+                                action: { isolationMode = .worktree }
+                            )
 
-                        Picker("Mode", selection: $isolationMode) {
-                            ForEach([IsolationMode.worktree, IsolationMode.shared], id: \.self) { mode in
-                                HStack {
-                                    Image(systemName: mode == .worktree ? "lock.shield" : "folder.badge.gearshape")
-                                    Text(mode.displayName)
-                                }
-                                .tag(mode)
-                            }
-                        }
-                        .pickerStyle(.radioGroup)
-
-                        if isolationMode == .worktree {
-                            HStack(spacing: 8) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
-                                Text("Main project stays buildable while Claude works")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(8)
-                            .background(Color.green.opacity(0.1))
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
-                        } else {
-                            HStack(spacing: 8) {
-                                Image(systemName: "exclamationmark.triangle.fill")
-                                    .foregroundColor(.orange)
-                                Text("Claude edits files directly - may affect builds")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding(8)
-                            .background(Color.orange.opacity(0.1))
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                            IsolationModeOption(
+                                mode: .shared,
+                                isSelected: isolationMode == .shared,
+                                action: { isolationMode = .shared }
+                            )
                         }
                     }
 
                     // Branch settings
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Branch")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-
-                        Toggle("Use custom branch name", isOn: $useCustomBranch)
-                            .font(.subheadline)
-
-                        if useCustomBranch {
-                            TextField("Branch name", text: $customBranch)
-                                .textFieldStyle(.roundedBorder)
-                                .font(.system(.body, design: .monospaced))
-                        } else {
-                            HStack {
-                                Image(systemName: "arrow.triangle.branch")
-                                    .foregroundColor(.secondary)
-
-                                Text(instanceName.isEmpty ? "claude/instance-name-xxxxxx" : generatedBranchName)
-                                    .font(.system(.body, design: .monospaced))
-                                    .foregroundColor(.secondary)
+                    FormSection(title: "Branch") {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Toggle(isOn: $useCustomBranch) {
+                                Text("Use custom branch name")
+                                    .font(.system(size: 12))
                             }
-                            .padding(8)
-                            .background(Color(nsColor: .controlBackgroundColor))
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                            .toggleStyle(.switch)
+                            .controlSize(.small)
+
+                            if useCustomBranch {
+                                TextField("Branch name", text: $customBranch)
+                                    .textFieldStyle(.roundedBorder)
+                                    .font(.system(size: 11, design: .monospaced))
+                            } else {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "arrow.triangle.branch")
+                                        .font(.system(size: 10))
+                                        .foregroundColor(.secondary)
+
+                                    Text(instanceName.isEmpty ? "claude/instance-name-xxxxxx" : generatedBranchName)
+                                        .font(.system(size: 11, design: .monospaced))
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 8)
+                                .background(Color(nsColor: .controlBackgroundColor))
+                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                            }
                         }
                     }
 
                     // Project info
                     if let project = appState.currentProject {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Project")
-                                .font(.subheadline)
-                                .fontWeight(.medium)
+                        FormSection(title: "Project") {
+                            HStack(spacing: 10) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .fill(LinearGradient(
+                                            colors: [.blue.opacity(0.7), .purple.opacity(0.7)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        ))
+                                        .frame(width: 28, height: 28)
 
-                            HStack {
-                                Image(systemName: "folder")
-                                    .foregroundColor(.secondary)
+                                    Text(String(project.name.prefix(1)).uppercased())
+                                        .font(.system(size: 12, weight: .semibold))
+                                        .foregroundColor(.white)
+                                }
 
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(project.name)
-                                        .font(.subheadline)
+                                        .font(.system(size: 12, weight: .medium))
 
                                     Text(project.path.path)
-                                        .font(.caption)
+                                        .font(.system(size: 10))
                                         .foregroundColor(.secondary)
                                         .lineLimit(1)
                                         .truncationMode(.middle)
                                 }
+
+                                Spacer()
                             }
-                            .padding(12)
+                            .padding(10)
                             .background(Color(nsColor: .controlBackgroundColor))
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
                         }
                     }
                 }
-                .padding(24)
+                .padding(20)
             }
 
             Divider()
@@ -200,23 +177,27 @@ struct NewInstanceSheet: View {
                 Button {
                     createInstance()
                 } label: {
-                    if isCreating {
-                        ProgressView()
-                            .scaleEffect(0.7)
-                            .frame(width: 60)
-                    } else {
-                        Text("Create")
-                            .frame(width: 60)
+                    HStack(spacing: 6) {
+                        if isCreating {
+                            ProgressView()
+                                .scaleEffect(0.6)
+                                .frame(width: 12, height: 12)
+                        } else {
+                            Image(systemName: "plus")
+                                .font(.system(size: 10, weight: .medium))
+                        }
+                        Text(isCreating ? "Creating..." : "Create Instance")
+                            .font(.system(size: 12, weight: .medium))
                     }
+                    .frame(width: 120)
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(!isValid || isCreating)
                 .keyboardShortcut(.return)
             }
             .padding(20)
-            .background(Color(nsColor: .controlBackgroundColor))
         }
-        .frame(width: 500, height: 550)
+        .frame(width: 460, height: 540)
     }
 
     private func createInstance() {
@@ -240,25 +221,88 @@ struct NewInstanceSheet: View {
     }
 }
 
-struct QuickTemplateButton: View {
+// MARK: - Supporting Views
+
+struct FormSection<Content: View>: View {
     let title: String
-    let icon: String
+    var hint: String? = nil
+    @ViewBuilder let content: () -> Content
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 6) {
+                Text(title)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(.secondary)
+
+                if let hint = hint {
+                    Text("- \(hint)")
+                        .font(.system(size: 10))
+                        .foregroundColor(.secondary.opacity(0.7))
+                }
+            }
+
+            content()
+        }
+    }
+}
+
+struct IsolationModeOption: View {
+    let mode: IsolationMode
+    let isSelected: Bool
     let action: () -> Void
+
+    @State private var isHovered = false
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.title2)
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(iconColor.opacity(0.12))
+                        .frame(width: 32, height: 32)
 
-                Text(title)
-                    .font(.caption)
+                    Image(systemName: mode == .worktree ? "lock.shield.fill" : "folder.badge.gearshape")
+                        .font(.system(size: 12))
+                        .foregroundColor(iconColor)
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(mode.displayName)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.primary)
+
+                    Text(mode == .worktree ?
+                         "Main project stays buildable" :
+                         "Edits files directly")
+                        .font(.system(size: 10))
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                if isSelected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.accentColor)
+                }
             }
-            .frame(width: 80, height: 70)
-            .background(Color(nsColor: .controlBackgroundColor))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .padding(10)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(isSelected ? Color.accentColor.opacity(0.08) : (isHovered ? Color.secondary.opacity(0.05) : Color.clear))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .strokeBorder(isSelected ? Color.accentColor.opacity(0.3) : Color.clear, lineWidth: 1)
+            )
         }
         .buttonStyle(.plain)
+        .onHover { isHovered = $0 }
+    }
+
+    private var iconColor: Color {
+        mode == .worktree ? .green : .orange
     }
 }
 
