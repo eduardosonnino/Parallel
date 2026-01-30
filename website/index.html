@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallel - Run Multiple AI Agents on Your Codebase</title>
+    <meta name="description" content="Orchestrate multiple Claude instances working on your project simultaneously. Ship features faster while keeping your codebase buildable.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230A0A0A' width='100' height='100' rx='20'/><path d='M30 35h40M30 50h40M30 65h25' stroke='%23fff' stroke-width='6' stroke-linecap='round'/><circle cx='70' cy='65' r='8' fill='%2310B981'/></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="24" height="24" rx="6" fill="currentColor"/>
+                        <path d="M6 8h12M6 12h12M6 16h8" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round"/>
+                        <circle cx="17" cy="16" r="2" fill="#10B981"/>
+                    </svg>
+                </div>
+                <span>Parallel</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="https://github.com/anthropics/claude-code" target="_blank" rel="noopener">GitHub</a>
+            </div>
+            <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-gradient"></div>
+            <div class="hero-grid"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Now in private beta
+            </div>
+            <h1 class="hero-title">
+                Run multiple AI agents<br>
+                <span class="gradient-text">in parallel</span>
+            </h1>
+            <p class="hero-subtitle">
+                Orchestrate multiple Claude Code instances working on your project simultaneously.
+                Ship features 10x faster while keeping your codebase always buildable.
+            </p>
+            <div class="hero-cta">
+                <a href="#waitlist" class="btn btn-primary">
+                    <span>Join the Waitlist</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value">10x</span>
+                    <span class="stat-label">Faster Development</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value">100%</span>
+                    <span class="stat-label">Always Buildable</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Merge Conflicts</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="terminal-title">Parallel</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="instance-row">
+                        <div class="instance-card active">
+                            <div class="instance-status running"></div>
+                            <div class="instance-info">
+                                <span class="instance-name">Auth System</span>
+                                <span class="instance-branch">claude/auth-oauth2</span>
+                            </div>
+                            <span class="instance-time">2m 34s</span>
+                        </div>
+                        <div class="instance-card">
+                            <div class="instance-status complete"></div>
+                            <div class="instance-info">
+                                <span class="instance-name">API Refactor</span>
+                                <span class="instance-branch">claude/api-async</span>
+                            </div>
+                            <span class="instance-badge">Ready to merge</span>
+                        </div>
+                    </div>
+                    <div class="instance-row">
+                        <div class="instance-card">
+                            <div class="instance-status running"></div>
+                            <div class="instance-info">
+                                <span class="instance-name">Dashboard UI</span>
+                                <span class="instance-branch">claude/dashboard</span>
+                            </div>
+                            <span class="instance-time">1m 12s</span>
+                        </div>
+                        <div class="instance-card">
+                            <div class="instance-status queued"></div>
+                            <div class="instance-info">
+                                <span class="instance-name">Test Coverage</span>
+                                <span class="instance-branch">claude/tests</span>
+                            </div>
+                            <span class="instance-queue">Queued</span>
+                        </div>
+                    </div>
+                    <div class="terminal-footer">
+                        <div class="footer-stat">
+                            <span class="footer-label">Active</span>
+                            <span class="footer-value blue">2</span>
+                        </div>
+                        <div class="footer-stat">
+                            <span class="footer-label">Ready</span>
+                            <span class="footer-value green">1</span>
+                        </div>
+                        <div class="footer-stat">
+                            <span class="footer-label">Queued</span>
+                            <span class="footer-value purple">1</span>
+                        </div>
+                        <div class="footer-progress">
+                            <div class="progress-bar" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Features</span>
+                <h2 class="section-title">Everything you need for<br>parallel AI development</h2>
+                <p class="section-subtitle">Built for teams who want to ship faster without sacrificing code quality.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Isolated Worktrees</h3>
+                    <p>Each Claude instance works in its own git worktree. Your main branch stays buildable while agents work in parallel.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Smart Orchestration</h3>
+                    <p>Automatically queue and prioritize tasks. Dependencies are tracked so features build on each other seamlessly.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>One-Click Merge</h3>
+                    <p>When an instance completes, merge and build with a single click. Changes come in clean, atomic buckets.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Feature Tracking</h3>
+                    <p>Kanban-style board to manage your backlog. Drag features to queue and watch them get picked up automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Live Terminal Output</h3>
+                    <p>Watch each Claude instance work in real-time. See exactly what's happening across all your parallel tasks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Git-Native Workflow</h3>
+                    <p>Every change tracked with proper branches and commits. Easy to review, revert, or cherry-pick individual features.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">How It Works</span>
+                <h2 class="section-title">Three simple steps to<br>10x your development</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Add your features</h3>
+                        <p>Import your backlog or add tasks one by one. Set priorities, dependencies, and let the orchestrator handle the rest.</p>
+                    </div>
+                    <div class="step-visual">
+                        <div class="mini-card">
+                            <span class="mini-type feature">Feature</span>
+                            <span class="mini-title">User Authentication</span>
+                        </div>
+                        <div class="mini-card">
+                            <span class="mini-type bugfix">Bug Fix</span>
+                            <span class="mini-title">Login Redirect Issue</span>
+                        </div>
+                        <div class="mini-card">
+                            <span class="mini-type refactor">Refactor</span>
+                            <span class="mini-title">API to async/await</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Watch them work</h3>
+                        <p>Claude instances spin up in isolated worktrees. Each works independently without affecting your main branch or each other.</p>
+                    </div>
+                    <div class="step-visual">
+                        <div class="parallel-viz">
+                            <div class="branch main">
+                                <span>main</span>
+                                <div class="branch-line"></div>
+                            </div>
+                            <div class="branch-group">
+                                <div class="branch feature">
+                                    <span>claude/auth</span>
+                                    <div class="branch-line"></div>
+                                    <div class="branch-dot running"></div>
+                                </div>
+                                <div class="branch feature">
+                                    <span>claude/api</span>
+                                    <div class="branch-line"></div>
+                                    <div class="branch-dot complete"></div>
+                                </div>
+                                <div class="branch feature">
+                                    <span>claude/ui</span>
+                                    <div class="branch-line"></div>
+                                    <div class="branch-dot running"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Merge and build</h3>
+                        <p>When features are ready, merge them to main one by one. Each merge triggers a build to ensure everything works together.</p>
+                    </div>
+                    <div class="step-visual">
+                        <div class="merge-viz">
+                            <div class="merge-item">
+                                <div class="merge-check">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M3 8l4 4 6-6" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <span>API Refactor merged</span>
+                            </div>
+                            <div class="merge-item">
+                                <div class="merge-check">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M3 8l4 4 6-6" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <span>Build passed</span>
+                            </div>
+                            <div class="merge-item pending">
+                                <div class="merge-dot"></div>
+                                <span>Auth System ready...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Waitlist Section -->
+    <section id="waitlist" class="waitlist">
+        <div class="container">
+            <div class="waitlist-card">
+                <div class="waitlist-content">
+                    <h2>Join the waitlist</h2>
+                    <p>Be among the first to experience parallel AI development. We're rolling out access gradually to ensure the best experience.</p>
+                    <form class="waitlist-form" id="waitlist-form">
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                            <button type="submit" class="btn btn-primary">
+                                <span>Get Early Access</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="form-note">No spam, ever. We'll only email you when it's your turn.</p>
+                    </form>
+                    <div class="waitlist-success" id="waitlist-success">
+                        <div class="success-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M5 12l5 5L20 7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3>You're on the list!</h3>
+                        <p>We'll reach out when it's your turn. In the meantime, follow us for updates.</p>
+                    </div>
+                </div>
+                <div class="waitlist-visual">
+                    <div class="waitlist-stats">
+                        <div class="ws-stat">
+                            <span class="ws-value" id="waitlist-count">2,847</span>
+                            <span class="ws-label">developers waiting</span>
+                        </div>
+                        <div class="ws-avatars">
+                            <div class="avatar" style="background: linear-gradient(135deg, #667eea, #764ba2)">J</div>
+                            <div class="avatar" style="background: linear-gradient(135deg, #f093fb, #f5576c)">S</div>
+                            <div class="avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe)">M</div>
+                            <div class="avatar" style="background: linear-gradient(135deg, #43e97b, #38f9d7)">A</div>
+                            <div class="avatar more">+2.8k</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="/" class="nav-logo">
+                        <div class="logo-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect width="24" height="24" rx="6" fill="currentColor"/>
+                                <path d="M6 8h12M6 12h12M6 16h8" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="17" cy="16" r="2" fill="#10B981"/>
+                            </svg>
+                        </div>
+                        <span>Parallel</span>
+                    </a>
+                    <p>Orchestrate multiple AI agents working on your codebase in parallel.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Product</h4>
+                        <a href="#features">Features</a>
+                        <a href="#how-it-works">How It Works</a>
+                        <a href="#waitlist">Join Waitlist</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <a href="https://github.com/anthropics/claude-code" target="_blank" rel="noopener">GitHub</a>
+                        <a href="https://docs.anthropic.com" target="_blank" rel="noopener">Documentation</a>
+                        <a href="https://anthropic.com" target="_blank" rel="noopener">Anthropic</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Parallel. Built with Claude.</p>
+                <div class="footer-social">
+                    <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
