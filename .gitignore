@@ -62,3 +62,4 @@ playground.xcworkspace
 # Temporary files
 *.swp
 *~
+node_modules/
