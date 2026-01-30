@@ -8,6 +8,7 @@ struct NewInstanceSheet: View {
     @State private var taskDescription: String = ""
     @State private var customBranch: String = ""
     @State private var useCustomBranch: Bool = false
+    @State private var isolationMode: IsolationMode = .worktree
     @State private var isCreating: Bool = false
 
     var isValid: Bool {
@@ -82,6 +83,48 @@ struct NewInstanceSheet: View {
                         Text("Describe what you want Claude to do. Be specific about the requirements.")
                             .font(.caption)
                             .foregroundColor(.secondary)
+                    }
+
+                    // Isolation mode
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Isolation Mode")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+
+                        Picker("Mode", selection: $isolationMode) {
+                            ForEach([IsolationMode.worktree, IsolationMode.shared], id: \.self) { mode in
+                                HStack {
+                                    Image(systemName: mode == .worktree ? "lock.shield" : "folder.badge.gearshape")
+                                    Text(mode.displayName)
+                                }
+                                .tag(mode)
+                            }
+                        }
+                        .pickerStyle(.radioGroup)
+
+                        if isolationMode == .worktree {
+                            HStack(spacing: 8) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                Text("Main project stays buildable while Claude works")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(8)
+                            .background(Color.green.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                        } else {
+                            HStack(spacing: 8) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.orange)
+                                Text("Claude edits files directly - may affect builds")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(8)
+                            .background(Color.orange.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                        }
                     }
 
                     // Branch settings
@@ -185,7 +228,8 @@ struct NewInstanceSheet: View {
             await appState.createInstance(
                 name: instanceName.trimmingCharacters(in: .whitespaces),
                 task: taskDescription.trimmingCharacters(in: .whitespaces),
-                branchName: branchName.isEmpty ? nil : branchName
+                branchName: branchName.isEmpty ? nil : branchName,
+                isolationMode: isolationMode
             )
 
             await MainActor.run {

@@ -17,17 +17,22 @@ class ClaudeInstanceManager: ObservableObject {
 
         instances.append(newInstance)
 
-        do {
-            try await gitManager.createBranch(instance.branchName)
-            try await gitManager.checkoutBranch(instance.branchName)
-
-            await launchClaudeProcess(for: newInstance)
-        } catch {
-            updateInstance(id: newInstance.id) { instance in
-                instance.status = .error
-                instance.errorMessage = error.localizedDescription
+        // For worktree mode, the branch is already created by WorktreeManager
+        // For shared mode, we need to create and checkout the branch
+        if instance.isolationMode == .shared {
+            do {
+                try await gitManager.createBranch(instance.branchName)
+                try await gitManager.checkoutBranch(instance.branchName)
+            } catch {
+                updateInstance(id: newInstance.id) { inst in
+                    inst.status = .error
+                    inst.errorMessage = error.localizedDescription
+                }
+                return
             }
         }
+
+        await launchClaudeProcess(for: newInstance)
     }
 
     private func launchClaudeProcess(for instance: ClaudeInstance) async {
@@ -42,7 +47,10 @@ class ClaudeInstanceManager: ObservableObject {
             "--dangerously-skip-permissions",
             instance.task
         ]
-        process.currentDirectoryURL = instance.projectPath
+
+        // Use workingPath - this is the worktree path for isolated mode
+        // or the main project path for shared mode
+        process.currentDirectoryURL = instance.workingPath
         process.standardOutput = outputPipe
         process.standardError = errorPipe
 
@@ -159,6 +167,12 @@ class ClaudeInstanceManager: ObservableObject {
         }
     }
 
+    func markInstanceMerged(_ instance: ClaudeInstance) {
+        updateInstance(id: instance.id) { inst in
+            inst.isMerged = true
+        }
+    }
+
     func refreshInstanceGitStatus(_ instance: ClaudeInstance, gitManager: GitManager) async {
         do {
             let changes = try await gitManager.getChangedFiles(for: instance.branchName)
@@ -206,6 +220,7 @@ class ClaudeInstanceManager: ObservableObject {
         newInstance.startTime = nil
         newInstance.endTime = nil
         newInstance.errorMessage = nil
+        newInstance.isMerged = false
 
         if let index = instances.firstIndex(where: { $0.id == instance.id }) {
             instances[index] = newInstance

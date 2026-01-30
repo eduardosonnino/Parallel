@@ -31,12 +31,35 @@ enum InstanceStatus: String, Codable {
     }
 }
 
+enum IsolationMode: String, Codable {
+    case shared = "shared"           // Works directly in main project (original behavior)
+    case worktree = "worktree"       // Works in isolated git worktree
+
+    var displayName: String {
+        switch self {
+        case .shared: return "Shared"
+        case .worktree: return "Isolated"
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .shared:
+            return "Claude works directly in the main project folder"
+        case .worktree:
+            return "Claude works in an isolated copy - safe to build anytime"
+        }
+    }
+}
+
 struct ClaudeInstance: Identifiable, Equatable {
     let id: UUID
     var name: String
     var task: String
-    var projectPath: URL
+    var projectPath: URL          // Main project path
+    var workingPath: URL          // Where Claude actually works (worktree or project)
     var branchName: String
+    var isolationMode: IsolationMode
     var status: InstanceStatus
     var output: String
     var changedFiles: [GitChange]
@@ -45,13 +68,16 @@ struct ClaudeInstance: Identifiable, Equatable {
     var endTime: Date?
     var processId: Int32?
     var errorMessage: String?
+    var isMerged: Bool
 
     init(
         id: UUID = UUID(),
         name: String,
         task: String,
         projectPath: URL,
+        workingPath: URL? = nil,
         branchName: String,
+        isolationMode: IsolationMode = .worktree,
         status: InstanceStatus = .idle,
         output: String = "",
         changedFiles: [GitChange] = [],
@@ -59,13 +85,16 @@ struct ClaudeInstance: Identifiable, Equatable {
         startTime: Date? = nil,
         endTime: Date? = nil,
         processId: Int32? = nil,
-        errorMessage: String? = nil
+        errorMessage: String? = nil,
+        isMerged: Bool = false
     ) {
         self.id = id
         self.name = name
         self.task = task
         self.projectPath = projectPath
+        self.workingPath = workingPath ?? projectPath
         self.branchName = branchName
+        self.isolationMode = isolationMode
         self.status = status
         self.output = output
         self.changedFiles = changedFiles
@@ -74,6 +103,7 @@ struct ClaudeInstance: Identifiable, Equatable {
         self.endTime = endTime
         self.processId = processId
         self.errorMessage = errorMessage
+        self.isMerged = isMerged
     }
 
     var duration: TimeInterval? {
