@@ -2,15 +2,17 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
-    @State private var selectedTab: SidebarTab = .instances
+    @State private var selectedTab: SidebarTab = .features
 
     enum SidebarTab: String, CaseIterable {
+        case features = "Features"
         case instances = "Instances"
         case changes = "Changes"
         case build = "Build"
 
         var icon: String {
             switch self {
+            case .features: return "list.bullet.rectangle"
             case .instances: return "terminal"
             case .changes: return "arrow.triangle.branch"
             case .build: return "hammer"
@@ -41,6 +43,8 @@ struct ContentView: View {
         } content: {
             Group {
                 switch selectedTab {
+                case .features:
+                    FeatureTrackerView(orchestrator: appState.orchestrator)
                 case .instances:
                     InstancesGridView()
                 case .changes:

@@ -17,6 +17,7 @@ class AppState: ObservableObject {
     let gitManager = GitManager()
     let buildRunner = BuildRunner()
     let worktreeManager = WorktreeManager()
+    let orchestrator = Orchestrator()
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -51,6 +52,7 @@ class AppState: ObservableObject {
 
     init() {
         setupBindings()
+        orchestrator.setAppState(self)
     }
 
     private func setupBindings() {

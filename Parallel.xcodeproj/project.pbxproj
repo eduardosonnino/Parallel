@@ -28,6 +28,9 @@
 		A1000019 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000019 /* AppState.swift */; };
 		A1000020 /* CommitStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000020 /* CommitStrategy.swift */; };
 		A1000021 /* WorktreeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000022 /* WorktreeManager.swift */; };
+		A1000022 /* Feature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000023 /* Feature.swift */; };
+		A1000023 /* Orchestrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000024 /* Orchestrator.swift */; };
+		A1000024 /* FeatureTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000025 /* FeatureTrackerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +57,9 @@
 		A2000020 /* CommitStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommitStrategy.swift; sourceTree = "<group>"; };
 		A2000021 /* Parallel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Parallel.entitlements; sourceTree = "<group>"; };
 		A2000022 /* WorktreeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorktreeManager.swift; sourceTree = "<group>"; };
+		A2000023 /* Feature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feature.swift; sourceTree = "<group>"; };
+		A2000024 /* Orchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orchestrator.swift; sourceTree = "<group>"; };
+		A2000025 /* FeatureTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureTrackerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +111,7 @@
 				A2000005 /* Project.swift */,
 				A2000006 /* GitChange.swift */,
 				A2000020 /* CommitStrategy.swift */,
+				A2000023 /* Feature.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -119,6 +126,7 @@
 				A2000014 /* BuildControlView.swift */,
 				A2000017 /* NewInstanceSheet.swift */,
 				A2000018 /* SettingsView.swift */,
+				A2000025 /* FeatureTrackerView.swift */,
 				A5000007 /* Components */,
 			);
 			path = Views;
@@ -131,6 +139,7 @@
 				A2000008 /* GitManager.swift */,
 				A2000009 /* BuildRunner.swift */,
 				A2000022 /* WorktreeManager.swift */,
+				A2000024 /* Orchestrator.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -233,6 +242,9 @@
 				A1000019 /* AppState.swift in Sources */,
 				A1000020 /* CommitStrategy.swift in Sources */,
 				A1000021 /* WorktreeManager.swift in Sources */,
+				A1000022 /* Feature.swift in Sources */,
+				A1000023 /* Orchestrator.swift in Sources */,
+				A1000024 /* FeatureTrackerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
